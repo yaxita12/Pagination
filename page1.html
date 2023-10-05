@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <table id="display"></table>
+    <div id="button"></div>
+    <select>
+        <option>10</option>
+        <option>20</option>
+        <option>30</option>
+    </select>
+    
+    <script>
+
+        let array = [];
+        fetch("https://jsonplaceholder.typicode.com/photos")
+        .then(function(value) {
+            return value.json()
+        }).then(function(value) {
+
+            array = value;
+            displayButton(value);
+            displayRecord(1);
+        })
+
+        function displayButton(value)
+        {
+            let perpage = 500;
+            let record = value.length/ perpage;
+            let html ='<div>'
+
+            for(let row=1;row<=record;row= row+1)
+            {
+
+              html = html +   `<span><button onclick="displayRecord(${row})">${row}</button>
+                </span>`
+
+            }
+
+
+                document.getElementById("button").innerHTML = html;
+            
+
+
+        }
+
+        function displayRecord(pagenumber)
+        {
+            let start = (pagenumber-1)* 500;
+            let end = start+500;
+            let finaloutput = array.slice(0,500);
+
+
+            let displayData = finaloutput.map(function(value) {
+
+                return (`<tr><td>${value.id}</td><td>${value.albumId}</td><td>
+                    ${value.title}</td><td>${value.url}</td><td>${value.thumbnailUrl}</td></tr>`)
+
+            })
+            
+         
+            document.getElementById("display").innerHTML = displayData.join(" ");
+
+        }
+    </script>
+</body>
+</html>
